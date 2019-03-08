@@ -1,0 +1,6 @@
+.idea
+.DS_Store
+server_config
+config/*
+*.x
+*.x.c
