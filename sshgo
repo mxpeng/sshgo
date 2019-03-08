@@ -337,6 +337,10 @@ function auto_login() {
 
     num=$(($1 - 1))
     config=( ${CONFIGS[$num]} )
+    mfa_code=$(curl -s http://localhost:17304/code/${config[4]})
+    if [[ ${mfa_code} = "key does not exists!" ]]; then
+        mfa_code=""
+    fi
 
     echo "正在登录【${config[0]} | ${config[1]}】"
     echo ""
@@ -344,7 +348,10 @@ function auto_login() {
     # 设置窗口标题
     echo -ne "\033]0; 【${config[0]} | ${config[1]}】  \007"
 
-    command="
+    command=""
+
+    if [[ -z ${mfa_code} ]]; then
+        command="
         expect {
                 \"yes/no\" {send \"yes\n\"; exp_continue;}
                 \"*assword\" {set timeout 6000; send \"${config[5]}\n\";}
@@ -352,7 +359,20 @@ function auto_login() {
                 \"Last*\" {  send_user \"\n成功登录【${config[0]} | ${config[1]}】\n\";}
         }
        interact
-    ";
+        ";
+    else
+        command="
+        expect {
+                \"yes/no\" {send \"yes\n\"; exp_continue;}
+                \"*assword\" {set timeout 6000; send \"${config[5]}\n\"; exp_continue;}
+                \"MFA auth\" {set timeout 6000; send \"${mfa_code}\n\";}
+                \"*passphrase\" {set timeout 6000; send \"${config[5]}\r\n\";}
+                \"Last*\" {  send_user \"\n成功登录【${config[0]} | ${config[1]}】\n\";}
+        }
+       interact
+        ";
+    fi
+
     pem=${config[6]}
     if [[ -n ${pem} ]]; then
         expect -c "spawn ssh -p ${config[3]} -i ${config[6]} ${config[4]}@${config[2]} ${command}"
