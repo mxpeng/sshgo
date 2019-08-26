@@ -1,4 +1,0 @@
-#!/bin/bash
-
-#加密shell，防止密钥泄漏
-shc -v -r -f ./sshgo
