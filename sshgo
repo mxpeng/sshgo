@@ -207,7 +207,7 @@ function add_config() {
     # 将一维字符串赋值到数组
     server_config_array=( ${server_config_str} )
 
-    server_config_file_name=${server_config_array[0]}_`echo -n ${server_config_str} | openssl md5`
+    server_config_file_name=${server_config_array[0]}_`echo -n ${server_config_str} | openssl md5 | cut -f2 -d" "`
 
     if [[ ! -d ${CONFIG_DIR} ]]; then
         mkdir -p ${CONFIG_DIR}
@@ -231,7 +231,7 @@ function delete_config() {
         server_config_str=${CONFIGS[$num]}
         server_cConfig_array=( ${server_config_str} )
 
-        server_config_file_name=${server_cConfig_array[0]}_`echo -n ${server_config_str} | openssl md5`
+        server_config_file_name=${server_cConfig_array[0]}_`echo -n ${server_config_str} | openssl md5 | cut -f2 -d" "`
 
         server_config_file_path=${CONFIG_DIR}/${server_config_file_name}
 
