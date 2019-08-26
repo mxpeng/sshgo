@@ -83,7 +83,7 @@ ln -s $PWD/sshgo /usr/local/bin
 
 - ssh连接信息使用`aes-256-cbc`对称加密存放在 `/usr/local/etc/sshgo/config` 文件夹中
 - 加密密钥写在`sshgo`脚本中，默认密钥`xxxxxx`
-- 注意替换后需要重新添加服务器信息，旧的将全部不可用
+- *注意替换后需要重新添加服务器信息，旧的服务器将全部不可用，请删除`/usr/local/etc/sshgo/config` 文件夹中的内容再操作已确保脚本正常*
 - shc命令执行后生成的`sshgo.x` 和 `sshgo.x.c`，`sshgo.x`是加密后的可执行的二进制文件，`sshgo.x.c`是生成`sshgo.x`的原文件(c语言)
 - 下面命令中`123456`是新的密钥，请替换成要修改的密钥
 
